@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<browserconfig>
+    <msapplication>
+        <tile>
+            <square150x150logo src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 150'><circle cx='56.25' cy='93.75' r='37.5' fill='%23e74c3c' stroke='%23c0392b' stroke-width='4.6875'/><circle cx='93.75' cy='93.75' r='37.5' fill='%23e74c3c' stroke='%23c0392b' stroke-width='4.6875'/><path d='M 56.25 56.25 Q 75 37.5 93.75 56.25' stroke='%232d5a27' stroke-width='9.375' fill='none' stroke-linecap='round'/><ellipse cx='75' cy='37.5' rx='18.75' ry='9.375' fill='%2327ae60' stroke='%232d5a27' stroke-width='2.34375'/><circle cx='46.875' cy='84.375' r='9.375' fill='%23ff6b6b' opacity='0.7'/><circle cx='84.375' cy='84.375' r='9.375' fill='%23ff6b6b' opacity='0.7'/></svg>" />
+            <TileColor>#e74c3c</TileColor>
+        </tile>
+    </msapplication>
+</browserconfig>
