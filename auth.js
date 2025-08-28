@@ -45,7 +45,7 @@
 		const passEl = document.getElementById("authPassword");
 		const signinBtn = document.getElementById("signinBtn");
 		const signupBtn = document.getElementById("signupBtn");
-		const googleBtn = document.getElementById("googleBtn");
+		const googleBtn = document.getElementById("googleSigninBtn");
 		if (!form) return; // not on login page
 
 		form.addEventListener("submit", async (e) => {
