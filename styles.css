@@ -64,6 +64,24 @@ body:before { content: ""; position: fixed; inset: 0; pointer-events: none; opac
 .column .quick-add:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #000; }
 .column .column-drop { flex: 1; padding: .75rem; display: grid; align-content: start; gap: .75rem; }
 .column .column-drop.drag-over { outline: 3px dashed #000; }
+
+/* iOS Touch Support */
+.card.touch-active {
+	transform: scale(1.05) !important;
+	box-shadow: 0 8px 25px rgba(0,0,0,0.3) !important;
+	z-index: 1000;
+	transition: all 0.2s ease;
+}
+
+/* Prevent text selection during touch */
+.card {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-touch-callout: none;
+	-webkit-tap-highlight-color: transparent;
+}
 .column .column-drop:empty:after { content: "Double-click to add task"; color: #000; opacity: .6; font-family: 'Press Start 2P', cursive; font-size: .65rem; }
 
 /* Card */

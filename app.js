@@ -184,6 +184,10 @@
 		el.addEventListener("keydown", (e) => {
 			if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openTaskModal(task); }
 		});
+		
+		// Add iOS touch support
+		addTouchSupport(el, task);
+		
 		return el;
 	}
 
@@ -278,6 +282,81 @@
 			task.status = /** @type any */(newStatus);
 			task.order = maxOrder + 1;
 			persist(); renderBoard();
+		});
+	}
+
+	// iOS Touch Support for Drag & Drop
+	let touchStartY = 0;
+	let touchStartX = 0;
+	let currentTouchTask = null;
+	let touchScrollTimeout = null;
+
+	// Add touch events to task cards
+	function addTouchSupport(taskElement, task) {
+		taskElement.addEventListener('touchstart', (e) => {
+			e.preventDefault();
+			touchStartY = e.touches[0].clientY;
+			touchStartX = e.touches[0].clientX;
+			currentTouchTask = task;
+			
+			// Add visual feedback
+			taskElement.classList.add('touch-active');
+			
+			// Prevent scrolling during touch
+			clearTimeout(touchScrollTimeout);
+		}, { passive: false });
+
+		taskElement.addEventListener('touchmove', (e) => {
+			if (!currentTouchTask) return;
+			
+			const touchY = e.touches[0].clientY;
+			const touchX = e.touches[0].clientX;
+			const deltaY = Math.abs(touchY - touchStartY);
+			const deltaX = Math.abs(touchX - touchStartX);
+			
+			// If significant movement, prevent scrolling
+			if (deltaY > 10 || deltaX > 10) {
+				e.preventDefault();
+			}
+		}, { passive: false });
+
+		taskElement.addEventListener('touchend', (e) => {
+			if (!currentTouchTask) return;
+			
+			const touchY = e.changedTouches[0].clientY;
+			const touchX = e.changedTouches[0].clientX;
+			const deltaY = Math.abs(touchY - touchStartY);
+			const deltaX = Math.abs(touchX - touchStartX);
+			
+			// Remove visual feedback
+			taskElement.classList.remove('touch-active');
+			
+			// If minimal movement, treat as click
+			if (deltaY < 10 && deltaX < 10) {
+				openTaskModal(currentTouchTask);
+				currentTouchTask = null;
+				return;
+			}
+			
+			// Find the column under the touch point
+			const elementBelow = document.elementFromPoint(touchX, touchY);
+			const columnDrop = elementBelow?.closest('.column-drop');
+			
+			if (columnDrop && currentTouchTask) {
+				const newStatus = columnDrop.getAttribute("data-column");
+				const board = activeBoard();
+				if (board && newStatus && newStatus !== currentTouchTask.status) {
+					// Move the task
+					const columnTasks = board.tasks.filter(t => t.status === newStatus && t.id !== currentTouchTask.id);
+					const maxOrder = Math.max(-1, ...columnTasks.map(t => t.order));
+					currentTouchTask.status = newStatus;
+					currentTouchTask.order = maxOrder + 1;
+					persist();
+					renderBoard();
+				}
+			}
+			
+			currentTouchTask = null;
 		});
 	}
 
