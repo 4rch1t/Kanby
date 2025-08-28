@@ -1,0 +1,170 @@
+/* Base */
+:root {
+	--bg: #fafafa; --fg: #0b0b0b; --muted: #6c6c6c; --line: #000; --soft: #f7f7f7;
+	--pink:#ffdce5; --blue:#e6e9ff; --green:#e9ffe6; --yellow:#fff6cc; --purple:#efe6ff;
+	--todo: var(--pink); --inprogress: var(--blue); --done: var(--green); --accent: var(--yellow);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; height: 100%; }
+body { font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; color: var(--fg); background: var(--bg); }
+
+/* Global background with subtle pixel dithering */
+body:before { content: ""; position: fixed; inset: 0; pointer-events: none; opacity: .2;
+	background:
+		repeating-linear-gradient(45deg, #0000 0 6px, #0001 6px 7px),
+		repeating-linear-gradient(135deg, #0000 0 6px, #0001 6px 7px);
+}
+
+/* Pixel feel */
+.pixel { font-family: 'Press Start 2P', cursive; letter-spacing: 0; }
+
+/* Header */
+.app-header { position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 4px solid var(--line); box-shadow: 0 6px 0 #00000010; }
+.app-header:before { content: ""; display: block; height: 6px; background: repeating-linear-gradient(90deg, #000, #000 8px, transparent 8px, transparent 16px); opacity: .12; }
+.app-header .brand { display: flex; align-items: center; gap: .5rem; padding: .75rem .75rem; }
+.app-header .logo { width: 28px; height: 28px; display: grid; place-items: center; border: 4px solid #000; border-radius: 2px; box-shadow: 4px 4px 0 #000; font-size: .9rem; background: #fff; }
+.app-header h1 { font-size: 1rem; margin: 0; font-weight: 800; letter-spacing: .3px; font-family: 'Press Start 2P', cursive; }
+
+.controls { display: flex; gap: .75rem; align-items: center; padding: .5rem .75rem 1rem; border-top: 4px solid var(--line); flex-wrap: wrap; justify-content: space-between; }
+.controls .board-switcher { display: flex; align-items: center; gap: .5rem; }
+.controls .filters, .controls .actions { display: flex; align-items: center; gap: .5rem; }
+.controls select, .controls input[type="search"], .controls button { border: 4px solid var(--line); background: #fff; color: var(--fg); padding: .55rem .7rem; border-radius: 0; outline: none; box-shadow: 4px 4px 0 #000; font-family: 'Press Start 2P', cursive; font-size: .7rem; }
+.controls select:focus-visible, .controls input[type="search"]:focus-visible, .controls button:focus-visible { outline: 2px dashed #000; outline-offset: 2px; }
+.controls button.primary { background: #000; color: #fff; }
+.controls .import-label { border: 4px solid var(--line); padding: .55rem .7rem; cursor: pointer; box-shadow: 4px 4px 0 #000; font-family: 'Press Start 2P', cursive; font-size: .7rem; background: var(--accent); }
+.controls .more button, .controls .import-label { font-size: .7rem; }
+
+/* Dropdowns */
+.dropdown > button { border: 4px solid var(--line); background: #fff; color: var(--fg); padding: .55rem .7rem; border-radius: 0; box-shadow: 4px 4px 0 #000; font-family: 'Press Start 2P', cursive; font-size: .7rem; }
+.menu-panel { position: absolute; margin-top: .4rem; border: 4px solid #000; background: #fff; box-shadow: 6px 6px 0 #000; padding: .5rem; display: grid; gap: .5rem; z-index: 25; }
+.dropdown { position: relative; }
+.menu-panel[hidden] { display: none; }
+.menu-panel .filters { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; }
+.menu-panel .filters input[type="search"] { grid-column: span 2; }
+
+/* Keep pixel inputs consistent inside menus */
+.menu-panel select, .menu-panel input, .menu-panel button, .menu-panel .import-label { border: 4px solid var(--line); background: #fff; color: var(--fg); padding: .45rem .6rem; box-shadow: 3px 3px 0 #000; font-family: 'Press Start 2P', cursive; font-size: .7rem; }
+.menu-panel button { text-align: left; }
+
+/* Board */
+.board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; padding: 1rem .75rem; min-height: calc(100vh - 160px); }
+.column { border: 4px solid var(--line); padding: 0; display: flex; flex-direction: column; background: var(--soft); box-shadow: 6px 6px 0 #000; position: relative; }
+.column[data-column="todo"] { background: linear-gradient(0deg, #fff8fb, var(--todo)); }
+.column[data-column="inprogress"] { background: linear-gradient(0deg, #f9faff, var(--inprogress)); }
+.column[data-column="done"] { background: linear-gradient(0deg, #f9fff7, var(--done)); }
+.column:after { content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .25;
+	background:
+		repeating-linear-gradient(0deg, #0000 0 10px, #0001 10px 12px),
+		repeating-linear-gradient(90deg, #0000 0 10px, #0001 10px 12px);
+}
+.column header { display: flex; align-items: center; gap: .5rem; justify-content: space-between; padding: .6rem .75rem; border-bottom: 4px solid var(--line); background: #fff; }
+.column header h2 { font-size: .8rem; margin: 0; font-family: 'Press Start 2P', cursive; }
+.column .count { font-size: .65rem; color: var(--muted); font-family: 'Press Start 2P', cursive; }
+.column .quick-add { border: 4px solid #000; background: var(--accent); font-family: 'Press Start 2P', cursive; font-size: .7rem; padding: .2rem .4rem; box-shadow: 3px 3px 0 #000; }
+.column .quick-add:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #000; }
+.column .column-drop { flex: 1; padding: .75rem; display: grid; align-content: start; gap: .75rem; }
+.column .column-drop.drag-over { outline: 3px dashed #000; }
+.column .column-drop:empty:after { content: "Double-click to add task"; color: #000; opacity: .6; font-family: 'Press Start 2P', cursive; font-size: .65rem; }
+
+/* Card */
+.card { background: #fff; border: 4px solid #000; padding: .6rem .75rem; cursor: grab; display: grid; gap: .35rem; box-shadow: 6px 6px 0 #000; }
+.card:active { cursor: grabbing; }
+.card:hover { transform: translate(-2px, -2px) rotate(-1deg); box-shadow: 10px 10px 0 #000; }
+.card:focus-visible { outline: 3px dashed #000; outline-offset: 2px; }
+.card .title { font-weight: 800; font-family: 'Press Start 2P', cursive; font-size: .75rem; }
+.card .desc { color: var(--fg); font-size: .8rem; line-height: 1.4; font-family: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+.card .meta { display: flex; gap: .4rem; flex-wrap: wrap; font-size: .6rem; color: #000; }
+.badge { border: 3px solid #000; padding: .1rem .4rem; background: #fff; box-shadow: 3px 3px 0 #000; font-family: 'Press Start 2P', cursive; }
+.badge.high { background: var(--pink); }
+.badge.medium { background: var(--blue); }
+.badge.low { background: var(--green); }
+.card .actions { margin-top: .2rem; display: flex; gap: .25rem; }
+.card .actions button { border: 3px solid #000; background: #fff; padding: .25rem .4rem; font-size: .65rem; box-shadow: 3px 3px 0 #000; font-family: 'Press Start 2P', cursive; }
+.card .actions button:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 #000; }
+
+/* Sticky note look for cards */
+.card { position: relative; background: #fffbe6; }
+.card:before, .card:after { content: ""; position: absolute; width: 28px; height: 12px; background: var(--yellow); border: 3px solid #000; box-shadow: 2px 2px 0 #000; }
+.card:before { top: -10px; left: 12px; transform: rotate(-4deg); }
+.card:after { top: -10px; right: 12px; transform: rotate(6deg); }
+
+/* Modal */
+.modal { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(0,0,0,.5); padding: 1rem; }
+.modal[hidden] { display: none; }
+.modal-content { width: min(720px, 100%); background: #fff; border: 4px solid #000; box-shadow: 10px 10px 0 #000; }
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: .75rem 1rem; border-bottom: 4px solid #000; }
+.modal-header .close { border: 4px solid #000; background: #fff; padding: .25rem .6rem; box-shadow: 4px 4px 0 #000; font-family: 'Press Start 2P', cursive; }
+#taskForm { display: grid; gap: .75rem; padding: 1rem; }
+#taskForm label { display: grid; gap: .35rem; font-weight: 600; font-family: 'Press Start 2P', cursive; font-size: .7rem; }
+#taskForm input, #taskForm textarea, #taskForm select { border: 4px solid #000; background: #fff; color: #000; padding: .5rem .6rem; font-family: 'Press Start 2P', cursive; font-size: .7rem; }
+#taskForm input:focus-visible, #taskForm textarea:focus-visible, #taskForm select:focus-visible { outline: 2px dashed #000; outline-offset: 2px; }
+#taskForm .row { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+.modal-footer { display: flex; gap: .5rem; justify-content: flex-end; }
+.modal-footer .primary { background: #000; color: #fff; border: 4px solid #000; padding: .5rem .9rem; box-shadow: 4px 4px 0 #000; font-family: 'Press Start 2P', cursive; }
+.modal-footer .danger { background: #fff; border: 4px solid #000; padding: .5rem .9rem; box-shadow: 4px 4px 0 #000; font-family: 'Press Start 2P', cursive; }
+
+/* Onboarding */
+.onboarding { position: fixed; inset: 0; display: grid; place-items: center; background: rgba(255,255,255,.95); }
+.onboarding[hidden] { display: none; }
+.onboarding-card { width: min(560px, 100%); border: 4px solid #000; background: #fff; box-shadow: 8px 8px 0 #000; padding: 1rem 1.25rem; }
+.onboarding-card h3 { margin-top: 0; font-family: 'Press Start 2P', cursive; }
+.onboarding-card ul { margin: .5rem 0 1rem; padding-left: 1.25rem; font-family: 'Press Start 2P', cursive; font-size: .7rem; }
+.onboarding-actions { display: flex; justify-content: flex-end; }
+.onboarding-actions .primary { background: #000; color: #fff; border: 4px solid #000; padding: .6rem 1rem; box-shadow: 6px 6px 0 #000; font-family: 'Press Start 2P', cursive; }
+
+/* SR-only */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); border: 0; }
+
+/* Print styles: 3 pages - To Do, In Progress, Done */
+@media print {
+	@page { size: A4; margin: 16mm; }
+	body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+	.app-header, .controls, .onboarding { display: none !important; }
+	.board { display: block; padding: 0; }
+	.column { break-after: page; page-break-after: always; box-shadow: none; border: 4px solid #000; }
+	.column[data-column="done"] { break-after: auto; page-break-after: auto; }
+	.column:after { display: none; }
+	.column header { background: #fff; border-bottom: 4px solid #000; }
+	.column .column-drop { display: grid; grid-template-columns: 1fr; gap: .5rem; padding: .5rem; }
+	.card { box-shadow: none; }
+}
+
+/* Responsive */
+@media (max-width: 980px) { .board { grid-template-columns: 1fr; } .controls { gap: .5rem; } #taskForm .row { grid-template-columns: 1fr; } } 
+
+/* Layout centering for wide screens */
+@media (min-width: 1280px) {
+	.app-header .brand, .controls, .board, .onboarding-card { max-width: none; margin-inline: 0; }
+}
+
+/* Nav hover polish */
+.controls .actions > .dropdown > button:hover, .controls .board-switcher > button:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 #000; } 
+
+/* Remove HUD styles (no longer used) */
+.hud, .hud .xp, .hud .xp #hudBar { display: none !important; }
+
+/* Vibrant animated pastel background */
+body { background: linear-gradient(120deg, #fffafc, #f0f7ff, #f3fff0); background-size: 200% 200%; animation: bgShift 16s ease-in-out infinite; }
+@keyframes bgShift { 0%{background-position: 0% 50%;} 50%{background-position: 100% 50%;} 100%{background-position: 0% 50%;} }
+
+/* Livelier hover interactions */
+.card:hover { transform: translate(-2px, -2px) rotate(-1deg); box-shadow: 10px 10px 0 #000; }
+.controls button.primary:hover, .dropdown > button:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #000; } 
+
+/* Auth page */
+.auth { display: grid; place-items: center; padding: 2rem .75rem; min-height: calc(100vh - 120px); }
+.auth-card { width: min(520px, 100%); border: 4px solid #000; background: #fff; box-shadow: 10px 10px 0 #000; padding: 1rem 1.25rem; display: grid; gap: .75rem; }
+.auth-sub { margin: 0; color: var(--muted); font-family: 'Press Start 2P', cursive; font-size: .7rem; }
+.auth-form { display: grid; gap: .6rem; }
+.auth-form label { display: grid; gap: .35rem; font-weight: 600; font-family: 'Press Start 2P', cursive; font-size: .7rem; }
+.auth-form input { border: 4px solid #000; background: #fff; color: #000; padding: .55rem .6rem; font-family: 'Press Start 2P', cursive; font-size: .7rem; }
+.auth-actions { display: flex; gap: .5rem; }
+.auth-actions button { border: 4px solid #000; background: #fff; color: var(--fg); padding: .6rem .9rem; box-shadow: 6px 6px 0 #000; font-family: 'Press Start 2P', cursive; font-size: .75rem; }
+.auth-actions button { flex: 1; }
+.auth-actions .primary { background: #000; color: #fff; }
+.auth-actions button:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 #000; }
+.auth-sep { display: grid; align-items: center; grid-template-columns: 1fr auto 1fr; gap: .5rem; color: var(--muted); font-family: 'Press Start 2P', cursive; font-size: .7rem; }
+.auth-sep:before, .auth-sep:after { content: ""; height: 3px; background: #000; opacity: .2; }
+.google-btn { border: 4px solid #000; background: var(--accent); padding: .6rem .8rem; box-shadow: 6px 6px 0 #000; font-family: 'Press Start 2P', cursive; font-size: .75rem; }
+.google-btn:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 #000; }
+.auth-hint { margin: .25rem 0 0; color: var(--muted); font-family: 'Press Start 2P', cursive; font-size: .65rem; }

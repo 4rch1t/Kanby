@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Kanby Login</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet" />
+	<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+	<header class="app-header" role="banner">
+		<div class="brand">
+			<div class="logo" aria-hidden="true">🍒</div>
+			<h1>Kanby</h1>
+		</div>
+	</header>
+
+	<main class="auth" role="main">
+		<section class="auth-card" aria-labelledby="authTitle">
+			<h2 id="authTitle" class="pixel">Welcome</h2>
+			<p class="auth-sub">Login to continue</p>
+
+			<form id="authForm" class="auth-form">
+				<label>Email<input id="authEmail" type="email" required autocomplete="email" /></label>
+				<label>Password<input id="authPassword" type="password" required autocomplete="current-password" minlength="6" /></label>
+				<div class="auth-actions">
+					<button type="submit" class="primary" id="signinBtn">Login</button>
+					<button type="button" id="signupBtn">Sign up</button>
+				</div>
+			</form>
+
+			<p class="auth-hint">By continuing you agree to the Terms.</p>
+		</section>
+	</main>
+
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+	<script>
+		window.SUPABASE_URL = "https://laubhgykjzgnpwfazosa.supabase.co";
+		window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxhdWJoZ3lranpnbnB3ZmF6b3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMDI2MzYsImV4cCI6MjA3MTg3ODYzNn0._Wf4_dILdJZI1zq1c81ay4i8NE44iM7KAn8CV9TWVX0";
+	</script>
+	<script src="auth.js" defer></script>
+</body>
+</html>
+

@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<title>Kanby</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com" />
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+	<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet" />
+	<link rel="stylesheet" href="styles.css" />
+</head>
+<body data-require-auth="true">
+	<header class="app-header" role="banner">
+		<div class="brand">
+			<div class="logo" aria-hidden="true">🍒</div>
+			<h1>Kanby</h1>
+		</div>
+		<nav class="controls" aria-label="Global controls">
+			<div class="board-switcher">
+				<label for="boardSelect" class="sr-only">Select board</label>
+				<select id="boardSelect" aria-label="Select board"></select>
+				<button id="newBoardBtn" title="New board" aria-label="Create new board">＋</button>
+				<button id="renameBoardBtn" title="Rename board" aria-label="Rename current board">✎</button>
+				<button id="deleteBoardBtn" title="Delete board" aria-label="Delete current board">🗑</button>
+			</div>
+
+			<div class="actions">
+				<div class="dropdown" id="filtersDropdown">
+					<button id="filtersToggle" aria-haspopup="true" aria-expanded="false" title="Filters">Filters ▾</button>
+					<div class="menu-panel" role="menu" aria-label="Filters" hidden>
+						<div class="filters">
+							<input id="searchInput" type="search" placeholder="/ Search tasks…" aria-label="Search tasks" />
+							<select id="filterPriority" aria-label="Filter by priority">
+								<option value="">Priority</option>
+								<option value="high">High</option>
+								<option value="medium">Medium</option>
+								<option value="low">Low</option>
+							</select>
+							<select id="filterCategory" aria-label="Filter by category">
+								<option value="">Category</option>
+							</select>
+							<select id="sortBy" aria-label="Sort tasks">
+								<option value="">Sort</option>
+								<option value="dueAsc">Due date ↑</option>
+								<option value="dueDesc">Due date ↓</option>
+								<option value="priority">Priority</option>
+								<option value="title">Title</option>
+							</select>
+						</div>
+					</div>
+				</div>
+
+				<button id="addTaskBtn" class="primary" title="N">Add Task</button>
+
+				<div class="dropdown" id="exportDropdown">
+					<button id="exportToggle" aria-haspopup="true" aria-expanded="false" title="Export">Export ▾</button>
+					<div class="menu-panel" role="menu" aria-label="Export actions" hidden>
+						<button id="exportPdfBtn" title="Export PDF">Export PDF</button>
+						<button id="exportBtn" title="Export JSON">Export JSON</button>
+					</div>
+				</div>
+
+				<div class="dropdown" id="moreDropdown">
+					<button id="moreToggle" aria-haspopup="true" aria-expanded="false" title="More">More ▾</button>
+					<div class="menu-panel" role="menu" aria-label="More actions" hidden>
+						<label for="importInput" class="import-label" title="Import JSON">Import JSON</label>
+						<input id="importInput" type="file" accept="application/json" hidden />
+						<button id="syncBtn" title="Cloud sync (stub)">Sync</button>
+						<button id="helpBtn" title="Help / Onboarding">Help</button>
+						<button id="signoutBtn" title="Sign out">Sign out</button>
+					</div>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	<main id="board" class="board" role="main" aria-live="polite">
+		<section class="column" data-column="todo" aria-label="To Do">
+			<header>
+				<h2>To Do</h2>
+				<span class="count" aria-live="polite"></span>
+				<button class="quick-add" data-target="todo" title="Quick add to To Do">＋</button>
+			</header>
+			<div class="column-drop" data-column="todo" aria-label="To Do drop zone" tabindex="0"></div>
+		</section>
+		<section class="column" data-column="inprogress" aria-label="In Progress">
+			<header>
+				<h2>In Progress</h2>
+				<span class="count" aria-live="polite"></span>
+				<button class="quick-add" data-target="inprogress" title="Quick add to In Progress">＋</button>
+			</header>
+			<div class="column-drop" data-column="inprogress" aria-label="In Progress drop zone" tabindex="0"></div>
+		</section>
+		<section class="column" data-column="done" aria-label="Done">
+			<header>
+				<h2>Done</h2>
+				<span class="count" aria-live="polite"></span>
+				<button class="quick-add" data-target="done" title="Quick add to Done">＋</button>
+			</header>
+			<div class="column-drop" data-column="done" aria-label="Done drop zone" tabindex="0"></div>
+		</section>
+	</main>
+
+	<!-- Task Modal -->
+	<div id="taskModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="taskModalTitle" hidden>
+		<div class="modal-content">
+			<header class="modal-header">
+				<h3 id="taskModalTitle">Task</h3>
+				<button class="close" id="closeTaskModal" aria-label="Close">✕</button>
+			</header>
+			<form id="taskForm">
+				<input type="hidden" id="taskId" />
+				<input type="hidden" id="taskStatusSeed" />
+				<label>Title<input id="taskTitle" required maxlength="120" /></label>
+				<label>Description<textarea id="taskDescription" rows="4"></textarea></label>
+				<div class="row">
+					<label>Priority
+						<select id="taskPriority">
+							<option value="low">Low</option>
+							<option value="medium" selected>Medium</option>
+							<option value="high">High</option>
+						</select>
+					</label>
+					<label>Due Date<input id="taskDue" type="date" /></label>
+					<label>Category<input id="taskCategory" placeholder="e.g. Work" /></label>
+				</div>
+				<footer class="modal-footer">
+					<button type="submit" class="primary" id="saveTaskBtn">Save</button>
+					<button type="button" id="deleteTaskBtn" class="danger">Delete</button>
+				</footer>
+			</form>
+		</div>
+	</div>
+
+	<!-- Onboarding -->
+	<div id="onboarding" class="onboarding" hidden>
+		<div class="onboarding-card">
+			<h3>Welcome to Kanby</h3>
+			<ul>
+				<li>Press N to create a new task.</li>
+				<li>Press / to focus search.</li>
+				<li>Drag cards between columns to update status.</li>
+				<li>Create multiple boards from the top left.</li>
+			</ul>
+			<div class="onboarding-actions">
+				<button id="onboardingDismiss" class="primary">Get started</button>
+			</div>
+		</div>
+	</div>
+
+	<!-- SR-only utility class -->
+	<div class="sr-only" aria-hidden="true"></div>
+
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+	<script>
+		window.SUPABASE_URL = "https://laubhgykjzgnpwfazosa.supabase.co";
+		window.SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxhdWJoZ3lranpnbnB3ZmF6b3NhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYzMDI2MzYsImV4cCI6MjA3MTg3ODYzNn0._Wf4_dILdJZI1zq1c81ay4i8NE44iM7KAn8CV9TWVX0";
+	</script>
+	<script src="auth.js" defer></script>
+	<script src="app.js" defer></script>
+</body>
+</html> 
