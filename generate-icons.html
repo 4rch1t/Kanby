@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cherry Icon Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; text-align: center; }
+        .icon-container { margin: 20px; display: inline-block; }
+        canvas { border: 1px solid #ddd; margin: 10px; }
+        .download-btn { 
+            display: block; 
+            margin: 10px auto; 
+            padding: 10px 20px; 
+            background: #e74c3c; 
+            color: white; 
+            text-decoration: none; 
+            border-radius: 5px; 
+        }
+    </style>
+</head>
+<body>
+    <h1>🍒 Cherry Icon Generator for PWA</h1>
+    <p>Generate the PNG icons needed for your iOS app to show the cherry logo properly.</p>
+    
+    <div id="icons"></div>
+    
+    <script>
+        function generateCherryIcon(size, filename) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            
+            // Scale factor for different sizes
+            const scale = size / 32;
+            
+            // Clear canvas
+            ctx.fillStyle = 'transparent';
+            ctx.fillRect(0, 0, size, size);
+            
+            // Cherry 1
+            ctx.fillStyle = '#e74c3c';
+            ctx.strokeStyle = '#c0392b';
+            ctx.lineWidth = scale;
+            ctx.beginPath();
+            ctx.arc(12 * scale, 20 * scale, 8 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Cherry 2
+            ctx.beginPath();
+            ctx.arc(20 * scale, 20 * scale, 8 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Cherry stems
+            ctx.strokeStyle = '#2d5a27';
+            ctx.lineWidth = 2 * scale;
+            ctx.lineCap = 'round';
+            ctx.beginPath();
+            ctx.moveTo(12 * scale, 12 * scale);
+            ctx.quadraticCurveTo(16 * scale, 8 * scale, 20 * scale, 12 * scale);
+            ctx.stroke();
+            
+            // Cherry leaves
+            ctx.fillStyle = '#27ae60';
+            ctx.strokeStyle = '#2d5a27';
+            ctx.lineWidth = 0.5 * scale;
+            ctx.beginPath();
+            ctx.ellipse(16 * scale, 8 * scale, 4 * scale, 2 * scale, 0, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.stroke();
+            
+            // Highlight on cherry 1
+            ctx.fillStyle = '#ff6b6b';
+            ctx.globalAlpha = 0.7;
+            ctx.beginPath();
+            ctx.arc(10 * scale, 18 * scale, 2 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Highlight on cherry 2
+            ctx.beginPath();
+            ctx.arc(18 * scale, 18 * scale, 2 * scale, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Reset alpha
+            ctx.globalAlpha = 1.0;
+            
+            // Create download link
+            const link = document.createElement('a');
+            link.download = filename;
+            link.href = canvas.toDataURL('image/png');
+            link.textContent = `Download ${filename}`;
+            link.className = 'download-btn';
+            
+            // Add to page
+            const container = document.createElement('div');
+            container.className = 'icon-container';
+            container.appendChild(canvas);
+            container.appendChild(link);
+            document.getElementById('icons').appendChild(container);
+        }
+        
+        // Generate different icon sizes
+        generateCherryIcon(192, 'cherry-icon-192.png');
+        generateCherryIcon(512, 'cherry-icon-512.png');
+    </script>
+</body>
+</html>
