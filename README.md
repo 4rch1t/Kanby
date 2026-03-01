@@ -1,4 +1,4 @@
-For CherryNet Technical Recruitment 
+
 <img width="1864" height="908" alt="image" src="https://github.com/user-attachments/assets/568afb4c-c5c7-4d4a-b72d-b615676ac483" />
 <img width="1864" height="913" alt="image" src="https://github.com/user-attachments/assets/bbcfd909-4644-4f96-8afd-84641d87cfb4" />
 <img width="436" height="273" alt="image" src="https://github.com/user-attachments/assets/17151fe4-0733-4546-b4c7-299a9256db7e" />
